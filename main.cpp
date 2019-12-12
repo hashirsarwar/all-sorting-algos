@@ -1,21 +1,47 @@
 #include <iostream>
-
+#include <fstream>
 using namespace std;
 
 class IntegerSorter{
     private:
-
         int* Keys;
         int TotalKeys;
 
-
         void BubbleSort(){
-            // Your implementation of Bubble Sort such that it also counts total comparisons, total swaps and total time taken
-            // to sort the 100,000 numbers
+
+            bool swapped;
+            for (int i = 0; i < TotalKeys; i++)
+            {
+                swapped = false;
+                for (int j = 0; j < TotalKeys-i-1; j++)
+                {
+                    if (Keys[j] > Keys[j+1])
+                    {
+                        swapped = true;
+                        swap(Keys[j], Keys[j+1]);
+                    }
+                }
+
+                if (!swapped)
+                    break;
+            }
         }
         void SelectionSort(){
-            // Your implementation of Selection Sort such that it also counts total comparisons, total //swaps and total time taken
-            // to sort the 100,000 numbers
+            int min;
+            int ind = 0;
+            for (int i = 0; i < TotalKeys; i++)
+            {
+                min = INT32_MAX;
+                for (int j = i; j < TotalKeys; j++)
+                {
+                    if (Keys[j] < min)
+                    {
+                        min = Keys[j];
+                        ind = j;
+                    }
+                }
+                swap(Keys[i], Keys[ind]);
+            }
         }
         void InsertionSort(){
             // Your implementation of Insertion Sort such that it also counts total comparisons,
@@ -73,6 +99,17 @@ class IntegerSorter{
             // Also compute number of seconds used for sorting
         }
 
+        void writeToFile()
+        {
+            cout << "Writing result to file...\n";
+            ofstream fout("result.txt");
+            fout.clear();
+            for (int i = 0; i < TotalKeys; i++)
+            {
+                fout << Keys[i] << endl;
+            }
+            cout << "Done\n";
+        }
 
     public:
 
@@ -91,22 +128,26 @@ class IntegerSorter{
                 delete[] Keys;
 
             this->TotalKeys = 0;
-            Keys = new  int (TotalKeys);
+            Keys = new int[TotalKeys];
 
             if(!Keys)
                 return false;
             this->TotalKeys = TotalKeys;
-
-            // Open File and Load Data into the Array
-
-
+            cout << "Reading data from file...\n";
+            ifstream fin(FileName);
+            int count = 0;
+            for (string str; getline(fin, str); count++)
+            {
+                Keys[count] = stoi(str);
+            }
+            cout << "Data read successfully.\n";
+            fin.close();
             return true;
         }
 
         void Sort(char Method){
-
+            cout << "Sorting...\n";
             clock_t beginTime = clock();
-
             switch (Method){
             case 'B':
             case 'b':
@@ -147,7 +188,9 @@ class IntegerSorter{
                 cout<<endl<<"Invalid Algorithm Choice"<<endl;
             break;
             }
-            cout << "Exec time:" << float(clock() - beginTime) << endl;
+            cout << "Exec time: " << float(clock() - beginTime) / CLOCKS_PER_SEC 
+            << " seconds." << endl;
+            writeToFile();
         }
 };
 
@@ -183,6 +226,9 @@ int main()
             return -1;
 
         IS.Sort(Choice);
+        cout << "HIT ENTER TO CONTINUE\n";
+        cin.ignore();
+        cin.get();
 
     }while(1);
 

@@ -1,5 +1,5 @@
 /*
-Generates 1000000 random integers
+Generates 100000 random integers
 and saves them in file.txt.
 */
 #include <fstream>
@@ -9,7 +9,7 @@ int main()
 {
     ofstream fout;
     fout.open("file.txt");
-    for (int i = 0; i < 1000000; i++)
+    for (int i = 0; i < 100000; i++)
     {
         fout << rand() << endl;
     }
