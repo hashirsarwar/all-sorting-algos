@@ -14,6 +14,6 @@ int main()
         fout << rand() << endl;
     }
     fout.close();
-    cout << "Done";
+    cout << "Done\n";
     return 0;
 }

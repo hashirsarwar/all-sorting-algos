@@ -7,8 +7,7 @@ class IntegerSorter{
         int* Keys;
         int TotalKeys;
 
-        void BubbleSort(){
-
+        void BubbleSort() {
             bool swapped;
             for (int i = 0; i < TotalKeys; i++)
             {
@@ -21,12 +20,11 @@ class IntegerSorter{
                         swap(Keys[j], Keys[j+1]);
                     }
                 }
-
                 if (!swapped)
                     break;
             }
         }
-        void SelectionSort(){
+        void SelectionSort() {
             int min;
             int ind = 0;
             for (int i = 0; i < TotalKeys; i++)
@@ -43,10 +41,17 @@ class IntegerSorter{
                 swap(Keys[i], Keys[ind]);
             }
         }
-        void InsertionSort(){
-            // Your implementation of Insertion Sort such that it also counts total comparisons,
-			// total swaps and total time taken
-            // to sort the 100,000 numbers
+        void InsertionSort() {
+            int val;
+            for (int i = 1; i < TotalKeys; i++)
+            {
+                val = Keys[i];
+                for (int j = i-1; j >= 0 && val < Keys[j]; j--)
+                {
+                    Keys[j+1] = Keys[j];
+                    Keys[j] = val;
+                }
+            }
         }
 
 		void BuildMaxHeap(){
@@ -226,7 +231,7 @@ int main()
             return -1;
 
         IS.Sort(Choice);
-        cout << "HIT ENTER TO CONTINUE\n";
+        cout << "HIT ENTER TO CONTINUE OR C-c TO EXIT\n";
         cin.ignore();
         cin.get();
 
