@@ -67,13 +67,43 @@ class IntegerSorter{
 
         }
 
-        void Merge(int Left, int Mid, int Right){
-            // To merge the two parts of keys from left - Mid and Mid+1 to Right
+        void Merge(int start, int mid, int end) {
+            int aux[end-start+1];
+            int tmp = mid+1;
+            int count = 0;
+            while (start <= mid && tmp <= end)
+            {
+                if (Keys[start] < Keys[tmp])
+                {
+                    aux[count] = Keys[start];
+                    ++start;
+                }
+                else
+                {
+                    aux[count] = Keys[tmp];
+                    ++tmp;
+                }
+                ++count;
+            }
+            while (start <= mid)
+            {
+                aux[count] = Keys[start];
+                ++start; ++count;
+            }
+            while (tmp <= end)
+            {
+                aux[count] = Keys[tmp];
+                ++tmp; ++count;
+            }
         }
-        void TopDownMergeSort(){
-            // Your implementation of top-down (i.e. recursive) Merge Sort
-            // such that it also counts total comparisons, total swaps and total time taken
-            // to sort the 100,000 numbers
+        void TopDownMergeSort(int start, int end) {
+            if (end > start)
+            {
+                int mid = (start + end) / 2;
+                TopDownMergeSort(start, mid);
+                TopDownMergeSort(mid+1, end);
+                Merge(start, mid, end);
+            }
         }
 
         void BottomUpMergeSort(){
@@ -167,7 +197,7 @@ class IntegerSorter{
                 InsertionSort();
             break;
             case 'm':
-                TopDownMergeSort();
+                TopDownMergeSort(0, TotalKeys);
             break;
             case 'M':
                 BottomUpMergeSort();
