@@ -7,13 +7,13 @@ and saves them in file.txt.
 using namespace std;
 int main()
 {
-    ofstream fout;
-    fout.open("file.txt");
-    for (int i = 0; i < 100000; i++)
-    {
-        fout << rand() << endl;
-    }
-    fout.close();
-    cout << "Done\n";
-    return 0;
+  ofstream fout;
+  fout.open("file.txt");
+  for (int i = 0; i < 1000000; i++)
+  {
+    fout << rand() << endl;
+  }
+  fout.close();
+  cout << "Done\n";
+  return 0;
 }
