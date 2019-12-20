@@ -123,21 +123,107 @@ private:
 
   void BottomUpMergeSort()
   {
+    int curr_size;
+    int left_start;
+
+    for (curr_size = 1; curr_size < TotalKeys; curr_size = 2 * curr_size)
+    {
+      for (left_start = 0; left_start < TotalKeys - 1; left_start += 2 * curr_size)
+      {
+        int mid = min(left_start + curr_size - 1, TotalKeys - 1);
+        int right_end = min(left_start + 2 * curr_size - 1, TotalKeys - 1);
+
+        Merge(left_start, mid, right_end);
+      }
+    }
   }
 
-  void Partition(int left, int right, int PivotIndex)
+  int Partition(int left, int right)
   {
+    // uniform_int_distribution<int> dist{left, right};
+    // int piv = dist(rd);
+    int num = Keys[right];
+    // swap(Keys[piv], Keys[right]);
+    int pInd = left;
+    for (int i = left; i < right; ++i)
+    {
+      if (Keys[i] <= num)
+      {
+        swap(Keys[i], Keys[pInd]);
+        ++pInd;
+      }
+    }
+    swap(Keys[right], Keys[pInd]);
+    return pInd;
   }
 
-  void QuickSort()
+  void QuickSort(int left, int right)
   {
+    if (left < right)
+    {
+      int p = Partition(left, right);
+      QuickSort(left, p-1);
+      QuickSort(p+1, right);
+    }
   }
 
-  void CountingSort(int MaxValue)
+  void CountingSort()
   {
+    int MaxValue;
+    cout << "enter maximum value\n";
+    cin >> MaxValue;
+    ++MaxValue;
+    int count[MaxValue] = { 0 };
+    for (int i = 0; i < TotalKeys; ++i)
+    {
+      ++count[Keys[i]];
+    }
+    for (int i = 1; i < MaxValue; ++i)
+    {
+      count[i] += count[i-1];
+    }
+    int num;
+    int* sorted = new int[TotalKeys];
+    for (int i = TotalKeys-1; i >= 0; --i)
+    {
+      num = Keys[i];
+      sorted[--count[num]] = num;
+    }
+    delete[] Keys;
+    Keys = sorted;
   }
   void RadixSort()
   {
+    int max = 0;
+    for (int i = 0; i < TotalKeys; ++i)
+    {
+      if (Keys[i] > max)
+      {
+        max = Keys[i];
+      }
+    }
+
+    for (int pos = 1; max/pos > 0; pos = pos*10)
+    {
+      int count[10] = { 0 };
+      int* aux = new int[TotalKeys];
+      for (int i = 0; i < TotalKeys; i++)
+      {
+        int index = (Keys[i] / pos) % 10;
+        ++count[index];
+      }
+      for (int i = 1; i < 10; ++i)
+      {
+        count[i] += count[i-1];
+      }
+
+      for (int i = TotalKeys-1; i >= 0; --i)
+      {
+        aux[--count[(Keys[i] / pos) % 10]] = Keys[i];
+      }
+      delete[] Keys;
+      Keys = aux;
+    }
   }
 
   void writeToFile()
@@ -219,11 +305,11 @@ public:
       break;
     case 'Q':
     case 'q':
-      QuickSort();
+      QuickSort(0, TotalKeys-1);
       break;
     case 'C':
     case 'c':
-      CountingSort(TotalKeys);
+      CountingSort();
       break;
     case 'R':
     case 'r':

@@ -1,17 +1,27 @@
 /*
-Generates 100000 random integers
+Generates random integers
 and saves them in file.txt.
 */
 #include <fstream>
 #include <iostream>
+#include <random>
 using namespace std;
 int main()
 {
   ofstream fout;
+  random_device rd;
+  int elements, start, end;
+  cout << "enter no of elements\n";
+  cin >> elements;
+  cout << "enter range start\n";
+  cin >> start;
+  cout << "enter range end\n";
+  cin >> end;
+  uniform_int_distribution<int> dist{start, end};
   fout.open("file.txt");
-  for (int i = 0; i < 1000000; i++)
+  for (int i = 0; i < elements; i++)
   {
-    fout << rand() << endl;
+    fout << dist(rd) << endl;
   }
   fout.close();
   cout << "Done\n";
